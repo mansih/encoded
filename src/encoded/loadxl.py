@@ -58,8 +58,10 @@ ORDER = [
     'analysis_step',
     'analysis_step_version',
     'pipeline',
+    'analysis_template',
     'analysis_step_run',
     'file',
+    'analysis',
     'star_quality_metric',
     'gene_quantification_quality_metric',
     'gene_type_quantification_quality_metric',
@@ -648,6 +650,9 @@ PHASE1_PIPELINES = {
     'matched_set': [
         remove_keys('related_datasets'),
     ],
+    'analysis_step_run': [
+        remove_keys('input_files', 'output_files')
+    ],
     'file': [
         remove_keys('derived_from', 'controlled_by', 'supersedes')
     ],
@@ -733,6 +738,9 @@ PHASE2_PIPELINES = {
     ],
     'publication': [
         skip_rows_missing_all_keys('datasets'),
+    ],
+    'analysis_step_run': [
+        skip_rows_missing_all_keys('input_files', 'output_files')
     ],
     'file': [
         skip_rows_missing_all_keys('derived_from', 'controlled_by', 'supersedes')
