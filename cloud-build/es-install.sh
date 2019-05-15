@@ -12,7 +12,7 @@ echo '  search:' >> /etc/elasticsearch/elasticsearch.yml
 echo '    size: 100' >> /etc/elasticsearch/elasticsearch.yml
 echo '    queue_size: 2000' >> /etc/elasticsearch/elasticsearch.yml
 echo '  index:' >> /etc/elasticsearch/elasticsearch.yml
-echo '    queue_size' >> /etc/elasticsearch/elasticsearch.yml
+echo '    queue_size: 400' >> /etc/elasticsearch/elasticsearch.yml
 echo 'indices.query.bool.max_clause_count: 8192' >> /etc/elasticsearch/elasticsearch.yml
 # Add options jvm.options
 echo '-XX:+UseConcMarkSweepGC' >> /etc/elasticsearch/jvm.options

@@ -245,9 +245,6 @@ write_files:
   content: |
     */5 * * * * nobody /opt/cloudwatchmon/bin/mon-put-instance-stats.py --mem-util --swap-util --disk-space-util --disk-path=/ --from-cron
 
-- path: /etc/postgresql/9.3/main/demo.conf
-  content: |
-    archive_mode = off
 - path: /etc/postgresql/9.3/main/master.conf
   content: |
     archive_command = '/opt/wal-e/bin/envfile --config ~postgres/.aws/credentials --section default --upper -- /opt/wal-e/bin/wal-e --s3-prefix="$(cat /etc/postgresql/9.3/main/wale_s3_prefix)" wal-push "%%p"'
@@ -256,5 +253,3 @@ write_files:
     recovery_target_timeline = 'latest'
     restore_command = '/opt/wal-e/bin/wal-e --aws-instance-profile --s3-prefix="$(cat /etc/postgresql/9.3/main/wale_s3_prefix)" wal-fetch "%%f" "%%p"'
     standby_mode = on
-- path: /etc/postgresql/9.3/main/wale_s3_prefix
-  content: "%(WALE_S3_PREFIX)s"
