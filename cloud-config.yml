@@ -146,7 +146,7 @@ runcmd:
 - sudo -u ubuntu git -C /home/ubuntu/encoded checkout -b %(GIT_BRANCH)s origin/%(GIT_BRANCH)s
 - sudo -u ubuntu /home/ubuntu/encoded/cloud-build/post-boot-install.sh
   # - /home/ubuntu/encoded/cloud-build/redis-conf.sh
-# - /home/ubuntu/encoded/cloud-build/es-conf.sh
+- /home/ubuntu/encoded/cloud-build/es-conf.sh
 
   # - MEMGIGS=$(awk '/MemTotal/{printf "%%.0f", $2 / 1024**2}' /proc/meminfo)
   # - if [ "$MEMGIGS" -gt 32 ]
