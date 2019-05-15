@@ -256,26 +256,6 @@ write_files:
     };
     Unattended-Upgrade::Mail "encode-devops@lists.stanford.edu";
     Unattended-Upgrade::Automatic-Reboot "false";
-- path: /etc/elasticsearch/jvm.options
-  content: |
-    -XX:+UseConcMarkSweepGC
-    -XX:CMSInitiatingOccupancyFraction=75
-    -XX:+UseCMSInitiatingOccupancyOnly
-    -XX:+DisableExplicitGC
-    -XX:+AlwaysPreTouch
-    -server
-    -Xss1m
-    -Djava.awt.headless=true
-    -Dfile.encoding=UTF-8
-    -Djna.nosys=true
-    -Djdk.io.permissionsUseCanonicalPath=true
-    -Dio.netty.noUnsafe=true
-    -Dio.netty.noKeySetOptimization=true
-    -Dio.netty.recycler.maxCapacityPerThread=0
-    -Dlog4j.shutdownHookEnabled=false
-    -Dlog4j2.disable.jmx=true
-    -Dlog4j.skipJansi=true
-    -XX:+HeapDumpOnOutOfMemoryError
   # - path: /etc/cron.d/cloudwatchmon
   # content: |
   #  */5 * * * * nobody /opt/cloudwatchmon/bin/mon-put-instance-stats.py --mem-util --swap-util --disk-space-util --disk-path=/ --from-cron
