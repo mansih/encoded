@@ -102,6 +102,8 @@ packages:
 # redis conf
 - redis-server
 # es conf
+- oracle-java11-installer
+- oracle-java11-set-default
 - elasticsearch
   # - apache2-mpm-worker
   # - bsdtar
@@ -122,8 +124,6 @@ packages:
   # - lzop
   # - nodejs
   # - ntp
-  # - oracle-java11-installer
-  # - oracle-java11-set-default
   # - postgresql-9.3
   # - pv
   # - python2.7-dev
@@ -256,6 +256,26 @@ write_files:
     };
     Unattended-Upgrade::Mail "encode-devops@lists.stanford.edu";
     Unattended-Upgrade::Automatic-Reboot "false";
+- path: /etc/elasticsearch/jvm.options
+  content: |
+    -XX:+UseConcMarkSweepGC
+    -XX:CMSInitiatingOccupancyFraction=75
+    -XX:+UseCMSInitiatingOccupancyOnly
+    -XX:+DisableExplicitGC
+    -XX:+AlwaysPreTouch
+    -server
+    -Xss1m
+    -Djava.awt.headless=true
+    -Dfile.encoding=UTF-8
+    -Djna.nosys=true
+    -Djdk.io.permissionsUseCanonicalPath=true
+    -Dio.netty.noUnsafe=true
+    -Dio.netty.noKeySetOptimization=true
+    -Dio.netty.recycler.maxCapacityPerThread=0
+    -Dlog4j.shutdownHookEnabled=false
+    -Dlog4j2.disable.jmx=true
+    -Dlog4j.skipJansi=true
+    -XX:+HeapDumpOnOutOfMemoryError
   # - path: /etc/cron.d/cloudwatchmon
   # content: |
   #  */5 * * * * nobody /opt/cloudwatchmon/bin/mon-put-instance-stats.py --mem-util --swap-util --disk-space-util --disk-path=/ --from-cron
@@ -269,26 +289,6 @@ write_files:
   #         index:
   #             queue_size: 400
   #     indices.query.bool.max_clause_count: 8192
-  # - path: /etc/elasticsearch/jvm.options
-  #   content: |
-  #     -XX:+UseConcMarkSweepGC
-  #     -XX:CMSInitiatingOccupancyFraction=75
-  #     -XX:+UseCMSInitiatingOccupancyOnly
-  #     -XX:+DisableExplicitGC
-  #     -XX:+AlwaysPreTouch
-  #     -server
-  #     -Xss1m
-  #     -Djava.awt.headless=true
-  #     -Dfile.encoding=UTF-8
-  #     -Djna.nosys=true
-  #     -Djdk.io.permissionsUseCanonicalPath=true
-  #     -Dio.netty.noUnsafe=true
-  #     -Dio.netty.noKeySetOptimization=true
-  #     -Dio.netty.recycler.maxCapacityPerThread=0
-  #     -Dlog4j.shutdownHookEnabled=false
-  #     -Dlog4j2.disable.jmx=true
-  #     -Dlog4j.skipJansi=true
-  #     -XX:+HeapDumpOnOutOfMemoryError
   # - path: /etc/postgresql/9.3/main/custom.conf
   #   content: |
   #     hot_standby = on

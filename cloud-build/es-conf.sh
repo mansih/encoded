@@ -2,7 +2,8 @@
 # Setup elastic search config
 # root user
 # apt deps:
-#	elasticsearch
+# 	java
+#	elasticsearch with apt_source and key
 
 # Set available java memory
 MEMGIGS=$(awk '/MemTotal/{printf "%%.0f", $2 / 1024**2}' /proc/meminfo)
