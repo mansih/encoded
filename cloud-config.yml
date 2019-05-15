@@ -139,6 +139,7 @@ power_state:
 output:
   all: '| tee -a /var/log/cloud-init-output.log'
 runcmd:
+- echo $(pwd)
 - sudo su - ubuntu
 - git clone --no-checkout %(GIT_REPO)s && cd encoded
 - git checkout %(COMMIT)s && cd cloud-build
