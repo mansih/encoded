@@ -141,7 +141,7 @@ output:
 runcmd:
 - sudo -u ubuntu git clone %(GIT_REPO)s /home/ubuntu/encoded
 - sudo -u ubuntu git -C /home/ubuntu/encoded checkout -b %(GIT_BRANCH)s origin/%(GIT_BRANCH)s
-# - ./post-boot-install
+- sudo -u ubuntu /home/ubuntu/encoded/cloud-build/post-boot-install.sh
 
 
 
