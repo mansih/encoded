@@ -1,6 +1,8 @@
 #!/bin/bash
 # Setup redis config
 # root user
+# apt deps:
+#	redis-server
 
 # Backup default redis config
 cp /etc/redis/redis.conf /etc/redis/redis.conf.default

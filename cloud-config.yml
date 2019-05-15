@@ -98,6 +98,7 @@ package_upgrade: true
 packages:
 - awscli
         # - apache2-mpm-worker
+- redis-server
         # - bsdtar
         # - build-essential
         # - elasticsearch
@@ -127,7 +128,6 @@ packages:
   # - python3-pip
   # - python-software-properties
   # - python-virtualenv
-  # - redis-server
   # - ruby-dev
   # - unattended-upgrades
   # - update-notifier-common
@@ -149,6 +149,7 @@ runcmd:
   # - sed -i -e 's/port 6379/port %(REDIS_PORT)s/' /etc/redis/redis.conf
   # - sed -i -e 's/bind 127\.0\.0\.1/bind 0\.0\.0\.0/' /etc/redis/redis.conf
   # - service redis-server restart
+  
   # - MEMGIGS=$(awk '/MemTotal/{printf "%%.0f", $2 / 1024**2}' /proc/meminfo)
   # - if [ "$MEMGIGS" -gt 32 ]
   # - then
