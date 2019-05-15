@@ -142,11 +142,9 @@ runcmd:
 - sudo -u ubuntu git clone %(GIT_REPO)s /home/ubuntu/encoded
 - sudo -u ubuntu git -C /home/ubuntu/encoded checkout -b %(GIT_BRANCH)s origin/%(GIT_BRANCH)s
 - sudo -u ubuntu /home/ubuntu/encoded/cloud-build/post-boot-install.sh
+- /home/ubuntu/encoded/cloud-build/redis-conf.sh
 
 
-
-  # - sudo -u ubuntu mv /home/ubuntu/.ssh/authorized_keys /home/ubuntu/.ssh/authorized_keys2
-  # - sudo -u ubuntu aws s3 cp --region=us-west-2 %(S3_AUTH_KEYS)s /home/ubuntu/.ssh/authorized_keys
   # - cp /etc/redis/redis.conf /etc/redis/redis.conf.default
   # - sed -i -e 's/port 6379/port %(REDIS_PORT)s/' /etc/redis/redis.conf
   # - sed -i -e 's/bind 127\.0\.0\.1/bind 0\.0\.0\.0/' /etc/redis/redis.conf
