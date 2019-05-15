@@ -139,6 +139,11 @@ power_state:
 output:
   all: '| tee -a /var/log/cloud-init-output.log'
 runcmd:
+- sudo su - ubuntu
+- git clone --no-checkout %(GIT_REPO)s && cd encoded
+- git checkout %(COMMIT)s && cd cloud-build
+- ./post-boot-install
+
   # - sudo -u ubuntu mv /home/ubuntu/.ssh/authorized_keys /home/ubuntu/.ssh/authorized_keys2
   # - sudo -u ubuntu aws s3 cp --region=us-west-2 %(S3_AUTH_KEYS)s /home/ubuntu/.ssh/authorized_keys
   # - cp /etc/redis/redis.conf /etc/redis/redis.conf.default
