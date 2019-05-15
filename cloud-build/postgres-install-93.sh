@@ -2,9 +2,8 @@
 # Setup postgres
 # postgres user
 # apt deps:
-#	postgresql-9.3
+#   postgresql-9.3
 
-set -ex
 chown postgres:postgres /etc/postgresql/9.3/main/*.conf
 echo "include 'custom.conf'" >> /etc/postgresql/9.3/main/postgresql.conf
 if test "%(ROLE)s" != "candidate"
