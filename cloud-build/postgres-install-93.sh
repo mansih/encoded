@@ -1,26 +1,16 @@
 #!/bin/bash
-# Setup elastic search config
-# root user
+# Setup postgres
+# postgres user
 # apt deps:
-#	elasticsearch
+#	postgresql-9.3
 
-# Set available java memory
-MEMGIGS=$(awk '/MemTotal/{printf "%%.0f", $2 / 1024**2}' /proc/meminfo)
-if [ "$MEMGIGS" -gt 32 ]
+set -ex
+chown postgres:postgres /etc/postgresql/9.3/main/*.conf
+echo "include 'custom.conf'" >> /etc/postgresql/9.3/main/postgresql.conf
+if test "%(ROLE)s" != "candidate"
 then
-   echo "-Xms8g" >> /etc/elasticsearch/jvm.options
-   echo "-Xmx8g" >> /etc/elasticsearch/jvm.options
-elif [ "$MEMGIGS" -gt 12 ]
-then
-   echo "-Xms4g" >> /etc/elasticsearch/jvm.options
-   echo "-Xmx4g" >> /etc/elasticsearch/jvm.options
-else
-   echo "-Xms2g" >> /etc/elasticsearch/jvm.options
-   echo "-Xmx2g" >> /etc/elasticsearch/jvm.options
-   sysctl "vm.swappiness=1"
-   swapon /swapfile
+  echo "standby_mode = off" >> /etc/postgresql/9.3/main/recovery.conf
+  echo "include 'demo.conf'" >> /etc/postgresql/9.3/main/postgresql.conf
 fi
-# not sure
-update-rc.d elasticsearch defaults
-# restart
-service elasticsearch restart
+sudo -u postgres createuser encoded
+sudo -u postgres createdb --owner=encoded encoded

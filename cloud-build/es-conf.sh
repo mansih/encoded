@@ -6,7 +6,7 @@
 #	elasticsearch with apt_source and key
 
 # Set available java memory
-MEMGIGS=$(awk '/MemTotal/{printf "%%.0f", $2 / 1024**2}' /proc/meminfo)
+MEMGIGS=$(awk '/MemTotal/{printf "%.0f", $2 / 1024**2}' /proc/meminfo)
 if [ "$MEMGIGS" -gt 32 ]
 then
    echo "-Xms8g" >> /etc/elasticsearch/jvm.options
