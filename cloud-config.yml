@@ -96,54 +96,58 @@ bootcmd:
 - cloud-init-per once mkswap-swapfile mkswap /swapfile
 package_upgrade: true
 packages:
-- apache2-mpm-worker
-- awscli
-- bsdtar
-- build-essential
-- elasticsearch
+        # - apache2-mpm-worker
+        # - awscli
+        # - bsdtar
+        # - build-essential
+        # - elasticsearch
 - git
-- graphviz
-- libapache2-mod-wsgi-py3
-- libevent-dev
-- libfreetype6-dev
-- libjpeg-dev
-- liblcms2-dev
-- libmagic-dev
-- libpq-dev
-- libssl-dev
-- libtiff5-dev
-- libwebp-dev
-- libxml2-dev
-- libxslt1-dev
-- lzop
-- nodejs
-- ntp
-- oracle-java11-installer
-- oracle-java11-set-default
-- postgresql-9.3
-- pv
-- python2.7-dev
-- python3.4-dev
-- python3-pip
-- python-software-properties
-- python-virtualenv
-- redis-server
-- ruby-dev
-- unattended-upgrades
-- update-notifier-common
-- zlib1g-dev
-- libffi-dev
-- bsd-mailx
+  # - graphviz
+  # - libapache2-mod-wsgi-py3
+  # - libevent-dev
+  # - libfreetype6-dev
+  # - libjpeg-dev
+  # - liblcms2-dev
+  # - libmagic-dev
+  # - libpq-dev
+  # - libssl-dev
+  # - libtiff5-dev
+  # - libwebp-dev
+  # - libxml2-dev
+  # - libxslt1-dev
+  # - lzop
+  # - nodejs
+  # - ntp
+  # - oracle-java11-installer
+  # - oracle-java11-set-default
+  # - postgresql-9.3
+  # - pv
+  # - python2.7-dev
+  # - python3.4-dev
+  # - python3-pip
+  # - python-software-properties
+  # - python-virtualenv
+  # - redis-server
+  # - ruby-dev
+  # - unattended-upgrades
+  # - update-notifier-common
+  # - zlib1g-dev
+  # - libffi-dev
+  # - bsd-mailx
 power_state:
   mode: reboot
 output:
   all: '| tee -a /var/log/cloud-init-output.log'
 runcmd:
 - echo $(pwd)
-- sudo su - ubuntu
-- git clone --no-checkout %(GIT_REPO)s && cd encoded
-- git checkout %(COMMIT)s && cd cloud-build
-- ./post-boot-install
+- sudo -u ubuntu git clone %(GIT_REPO)s /home/ubuntu/encoded
+- sudo -u ubuntu cd /home/ubuntu/encoded 
+  # - sudo -u ubuntu git checkout -b %(GIT_BRANCH)s origin/%(GIT_BRANCH)s
+  # - git clone --no-checkout %(GIT_REPO)s && cd encoded
+  # - git checkout %(COMMIT)s && cd cloud-build
+  # - ./post-boot-install
+
+
 
   # - sudo -u ubuntu mv /home/ubuntu/.ssh/authorized_keys /home/ubuntu/.ssh/authorized_keys2
   # - sudo -u ubuntu aws s3 cp --region=us-west-2 %(S3_AUTH_KEYS)s /home/ubuntu/.ssh/authorized_keys
