@@ -139,15 +139,9 @@ power_state:
 output:
   all: '| tee -a /var/log/cloud-init-output.log'
 runcmd:
-- echo "HEREIAM $(pwd)"
-- sudo su - ubuntu
-- echo "HEREIAM $(pwd)"
 - sudo -u ubuntu git clone %(GIT_REPO)s /home/ubuntu/encoded
-- sudo -u ubuntu cd /home/ubuntu/encoded 
-  # - sudo -u ubuntu git checkout -b %(GIT_BRANCH)s origin/%(GIT_BRANCH)s
-  # - git clone --no-checkout %(GIT_REPO)s && cd encoded
-  # - git checkout %(COMMIT)s && cd cloud-build
-  # - ./post-boot-install
+- sudo -u ubuntu git --git-dir /home/ubuntu/encoded/.git checkout -b %(GIT_BRANCH)s origin/%(GIT_BRANCH)s
+# - ./post-boot-install
 
 
 
