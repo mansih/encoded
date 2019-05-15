@@ -19,14 +19,13 @@ echo 'archive_mode = off' >> /etc/postgresql/9.3/main/demo.conf
 echo "archive_command = '/opt/wal-e/bin/envfile --config ~postgres/.aws/credentials --section default --upper -- /opt/wal-e/bin/wal-e --s3-prefix=\"\$(cat /etc/postgresql/9.3/main/wale_s3_prefix)\" wal-push \"%p\"'" >> /etc/postgresql/9.3/main/master.conf
 # create recovery.conf
 echo "recovery_target_timeline = 'latest'" >> /etc/postgresql/9.3/main/recovery.conf
-echo "restore_command = '/opt/wal-e/bin/wal-e --aws-instance-profile --s3-prefix=\"\$\(cat /etc/postgresql/9.3/main/wale_s3_prefix\)\" wal-fetch \"%f\" \"%p\"'" >> /etc/postgresql/9.3/main/recovery.conf
-echo "standby_mode = on" >> /etc/postgresql/9.3/main/recovery.conf
+echo "restore_command = '/opt/wal-e/bin/wal-e --aws-instance-profile --s3-prefix=\"\$(cat /etc/postgresql/9.3/main/wale_s3_prefix)\" wal-fetch \"%f\" \"%p\"'" >> /etc/postgresql/9.3/main/recovery.conf
+echo "standby_mode = off" >> /etc/postgresql/9.3/main/recovery.conf
+# create postgres conf
+echo "include 'custom.conf'" >> /etc/postgresql/9.3/main/postgresql.conf
+echo "include 'demo.conf'" >> /etc/postgresql/9.3/main/postgresql.conf
 # create wal-e prefix
 echo "s3://encoded-backups-prod/production" >> /etc/postgresql/9.3/main/wale_s3_prefix
-
 chown postgres:postgres /etc/postgresql/9.3/main/*.conf
-echo "include 'custom.conf'" >> /etc/postgresql/9.3/main/postgresql.conf
-echo "standby_mode = off" >> /etc/postgresql/9.3/main/recovery.conf
-echo "include 'demo.conf'" >> /etc/postgresql/9.3/main/postgresql.conf
 sudo -u postgres createuser encoded
 sudo -u postgres createdb --owner=encoded encoded
