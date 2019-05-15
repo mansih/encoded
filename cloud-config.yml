@@ -140,7 +140,7 @@ output:
   all: '| tee -a /var/log/cloud-init-output.log'
 runcmd:
 - sudo -u ubuntu git clone %(GIT_REPO)s /home/ubuntu/encoded
-- sudo -u ubuntu git --git-dir /home/ubuntu/encoded/.git checkout -b %(GIT_BRANCH)s origin/%(GIT_BRANCH)s
+- sudo -u ubuntu git -C /home/ubuntu/encoded checkout -b %(GIT_BRANCH)s origin/%(GIT_BRANCH)s
 # - ./post-boot-install
 
 
