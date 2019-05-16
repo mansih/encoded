@@ -3,7 +3,8 @@
 # postgres user
 # apt deps:
 #   postgresql-9.3
-
+#   python2.7-dev # wal-e
+#   lzop # wal-e
 
 # create custom.conf
 echo 'hot_standby = on' >> /etc/postgresql/9.3/main/custom.conf

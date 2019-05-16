@@ -109,9 +109,12 @@ packages:
 - python-virtualenv
 # pg
 - postgresql-9.3
+# wal-e
+- python2.7-dev
+- lzop
+  # - python2.7-dev
   # - apache2-mpm-worker
   # - bsdtar
-  # - build-essential
   # - graphviz
   # - libapache2-mod-wsgi-py3
   # - libevent-dev
@@ -125,11 +128,9 @@ packages:
   # - libwebp-dev
   # - libxml2-dev
   # - libxslt1-dev
-  # - lzop
   # - nodejs
   # - ntp
   # - pv
-  # - python2.7-dev
   # - python3.4-dev
   # - python3-pip
   # - python-software-properties
