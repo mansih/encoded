@@ -105,7 +105,9 @@ packages:
 - oracle-java11-installer
 - oracle-java11-set-default
 - elasticsearch
-  # pg
+# cloudwatchmon
+- python-virtualenv
+# pg
 - postgresql-9.3
   # - apache2-mpm-worker
   # - bsdtar
@@ -131,7 +133,6 @@ packages:
   # - python3.4-dev
   # - python3-pip
   # - python-software-properties
-  # - python-virtualenv
   # - ruby-dev
   # - unattended-upgrades
   # - update-notifier-common
@@ -148,8 +149,8 @@ runcmd:
 - sudo -u ubuntu /home/ubuntu/encoded/cloud-build/post-boot-install.sh
 - /home/ubuntu/encoded/cloud-build/redis-install.sh
 - /home/ubuntu/encoded/cloud-build/es-install.sh
+- /home/ubuntu/encoded/cloud-build/cloudwatchmon-install.sh
 # - /home/ubuntu/encoded/cloud-build/pg93-install.sh
-# - /home/ubuntu/encoded/cloud-build/cloudwatchmon-install.sh
 # - /home/ubuntu/encoded/cloud-build/encd-install.sh
 # - /home/ubuntu/encoded/cloud-build/post-install-install.sh
   

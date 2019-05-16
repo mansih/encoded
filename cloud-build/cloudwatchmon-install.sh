@@ -2,6 +2,7 @@
 # Setup cloudwatchmon
 # build user
 # apt deps:
+#       virtualenv
 
 
 mkdir /opt/cloudwatchmon
