@@ -152,8 +152,8 @@ runcmd:
 - /home/ubuntu/encoded/cloud-build/es-install.sh
 - /home/ubuntu/encoded/cloud-build/cloudwatchmon-install.sh
 - /home/ubuntu/encoded/cloud-build/pg93-install.sh
-# - /home/ubuntu/encoded/cloud-build/encd-install.sh
-# - /home/ubuntu/encoded/cloud-build/post-install-install.sh
+- /home/ubuntu/encoded/cloud-build/encd-install.sh %(GIT_REPO)s %(GIT_BRANCH)s %(ROLE)s %(ES_IP)s %(ES_PORT)s
+- /home/ubuntu/encoded/cloud-build/post-install-install.sh
   
 users:
 - default
