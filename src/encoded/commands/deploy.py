@@ -398,6 +398,7 @@ def _get_instance_output(
         attach_dm=False,
         given_name=None,
         is_production=False,
+        is_cluster=False,
 ):
     hostname = '{}.{}.encodedcc.org'.format(
         instances_tag_data['id'],
@@ -408,28 +409,28 @@ def _get_instance_output(
     domain = 'demo'
     if instances_tag_data['domain'] == 'production':
         domain = 'production'
-    return [
+    output_list = [
         'Host %s%s.*' % (name_to_use, suffix),
         '  Hostname %s' % hostname,
-        '  # https://%s.%s.encodedcc.org' % (instances_tag_data['name'], domain),
-        '  # ssh ubuntu@%s' % hostname,
     ]
+    if not is_cluster:
+        output_list.append('  # https://%s.%s.encodedcc.org' % (instances_tag_data['name'], domain))
+    output_list.append('  # ssh ubuntu@%s' % hostname)
+    return output_list
 
 
 def _wait_and_tag_instances(main_args, run_args, instances_tag_data, instances, cluster_master=False):
     tmp_name = instances_tag_data['name']
     instances_tag_data['domain'] = 'production' if main_args.profile_name == 'production' else 'instance'
-    output_list = ['']
+    output_list = []
     is_elasticsearch = main_args.elasticsearch == 'yes'
     is_cluster_master = False
     is_cluster = False
     if is_elasticsearch and run_args['count'] > 1:
         if cluster_master and run_args['master_user_data']:
             is_cluster_master = True
-            output_list.append('Creating Elasticsearch Master Node for cluster')
         else:
             is_cluster = True
-            output_list.append('Creating Elasticsearch cluster')
     created_cluster_master = False
     for i, instance in enumerate(instances):
         instances_tag_data['name'] = tmp_name
@@ -446,6 +447,7 @@ def _wait_and_tag_instances(main_args, run_args, instances_tag_data, instances, 
                     instances_tag_data,
                     attach_dm=True,
                     given_name=main_args.name,
+                    is_cluster=is_cluster,
                 ))
             if is_cluster:
                 output_list.append('  # Data Node %d: %s' % (i, instance.id))
