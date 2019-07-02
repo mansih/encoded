@@ -20,7 +20,7 @@ echo 'checkpoint_timeout = 1h' >> /etc/postgresql/9.3/main/custom.conf
 # create demo.conf
 echo 'archive_mode = off' >> /etc/postgresql/9.3/main/demo.conf
 # create master.conf
-echo "archive_command = '/opt/wal-e/bin/envfile --config ~postgres/.aws/credentials --section write-encoded-backups-dev --upper -- /opt/wal-e/bin/wal-e --s3-prefix=\"\$(cat /etc/postgresql/9.3/main/wale_s3_prefix)\" wal-push \"%p\"'" >> /etc/postgresql/9.3/main/master.conf
+echo "archive_command = '/opt/wal-e/bin/envfile --config ~postgres/.aws/credentials --section default --upper -- /opt/wal-e/bin/wal-e --s3-prefix=\"\$(cat /etc/postgresql/9.3/main/wale_s3_prefix)\" wal-push \"%p\"'" >> /etc/postgresql/9.3/main/master.conf
 # create recovery.conf
 echo "recovery_target_timeline = 'latest'" >> /etc/postgresql/9.3/main/recovery.conf
 echo "restore_command = '/opt/wal-e/bin/wal-e --aws-instance-profile --s3-prefix=\"\$(cat /etc/postgresql/9.3/main/wale_s3_prefix)\" wal-fetch \"%f\" \"%p\"'" >> /etc/postgresql/9.3/main/recovery.conf
