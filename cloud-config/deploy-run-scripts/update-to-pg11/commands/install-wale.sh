@@ -3,8 +3,9 @@ sudo apt-get install python3.4-venv
 sudo -u postgres /usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data start
 sudo -u root mkdir /opt/pg-wal-e
 sudo -u root chown -R postgres:postgres /opt/pg-wal-e
-sudo -u root sudo -u root mkdir -p /etc/wal-e.d/env
+sudo -u root mkdir -p /etc/wal-e.d/env
 sudo -u root chown -R postgres:postgres /etc/wal-e.d
+
 if [ "$2" == 'prod' ]; then
     sudo -u postgres /usr/bin/aws s3 cp --region=us-west-2 --recursive s3://encoded-conf-prod/.aws /var/lib/postgresql/.aws
     sudo -u postgres cp /var/lib/postgresql/.aws/credentials_key /etc/wal-e.d/env/AWS_ACCESS_KEY_ID

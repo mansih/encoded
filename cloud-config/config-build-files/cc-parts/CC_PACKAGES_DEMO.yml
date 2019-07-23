@@ -12,10 +12,13 @@ packages:
 # node
 - nodejs
 # pg
-- postgresql-9.3
+- daemontools
+- postgresql
+- postgresql-contrib
 # wal-e
-- python2.7-dev
 - lzop
+# cloudwatchmon
+- python2.7-dev
 # unknown
 - build-essential
 - apache2-mpm-worker
@@ -36,6 +39,7 @@ packages:
 - ntp
 - pv
 - python3.4-dev
+- python3.4-venv
 - python3-pip
 - python-software-properties
 - ruby-dev

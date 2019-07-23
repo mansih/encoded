@@ -9,8 +9,3 @@ power_state:
   mode: reboot
 output:
   all: '| tee -a /var/log/cloud-init-output.log'
-%(CC_RUNCMD_DEMO_PG11)s
-%(CC_USERS)s
-write_files:
-%(CC_WF_UPGRADES)s
-%(CC_WF_CLOUDWATCHMON)s

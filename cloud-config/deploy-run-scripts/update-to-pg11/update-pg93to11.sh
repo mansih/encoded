@@ -220,7 +220,7 @@ if [ 0 -eq 0 ]; then
     echo '$/opt/pg-wal-e/.py343-wal-e/bin/pip install -e /opt/pg-wal-e/wal-e'
     echo '$exit'
 
-    echo -e "\nAfter running these commands rerun this script with waleokay as ubuntu user.'
+    echo -e '\nAfter running these commands rerun this script with waleokay as ubuntu user.'
     echo '$./update-pg93to11.sh live demo waleokay'
     exit 0
 fi
