@@ -2,6 +2,8 @@
 # Oracle Java 11 installation
 # ubuntu user
 # apt deps:
+filename="$(basename "$0")"
+echo "ENCD-INSTALL: $filename"
 
 # Manually install java
 sudo -u ubuntu aws s3 cp --region=us-west-2 --recursive s3://encoded-conf-prod/encd-tars ~ubuntu/encd-tars

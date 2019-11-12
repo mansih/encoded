@@ -4,8 +4,11 @@
 # ubuntu user
 # apt deps:
 # 	awscli
+filename="$(basename "$0")"
+echo "ENCD-INSTALL: $filename"
 
 S3_AUTH_KEYS=$1
+
 
 # Add team ssh public keys from s3
 mv /home/ubuntu/.ssh/authorized_keys /home/ubuntu/.ssh/authorized_keys2

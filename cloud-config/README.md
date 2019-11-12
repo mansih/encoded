@@ -80,3 +80,11 @@ Host wait-conf-pre-dm.*
 * RC Cluster Deployment
 * Test Cluster Deployment
 * Prod Cluster Deployment
+
+
+# ENCD-3983 Ubuntu 18 and amis
+### Build new ami per ubuntu18 upgrade
+    * bin/deploy --use-prebuilt 20191112-pg11-u18-demo --build-ami -n encd-3983-u18-build-ami
+    * Copy ami id into deploy script
+### Build u18 demo off ami
+    * bin/deploy --use-prebuilt 20191112-pg11-u18-demo -n encd-3983-u18-from-ami

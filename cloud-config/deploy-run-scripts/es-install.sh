@@ -4,6 +4,9 @@
 # apt deps:
 #   java
 #   elasticsearch with apt_source and key
+filename="$(basename "$0")"
+echo "ENCD-INSTALL: $filename"
+
 
 CLUSTER_NAME="$1"
 JVM_GIGS="$2"
