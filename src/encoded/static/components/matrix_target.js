@@ -104,7 +104,7 @@ class TargetTabPanel extends TabPanel {
     }
 
     render() {
-        const { tabs, headers, tabPanelCss, navCss, moreComponents, moreComponentsClasses, tabFlange, decoration, decorationClasses } = this.props;
+        const { headers, navCss, moreComponents, moreComponentsClasses, tabFlange, decoration, decorationClasses } = this.props;
         let children = [];
         let firstPaneIndex = -1; // React.Children.map index of first <TabPanelPane> component
 
