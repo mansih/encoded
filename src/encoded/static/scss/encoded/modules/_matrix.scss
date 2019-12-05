@@ -603,14 +603,42 @@ table.matrix th.group-all-groups-cell {
             }
         }
     }
+}
 
-    .target-matrix__row-data {
-        td {
-            text-align:center;
+.target-matrix__row-data {
+    td {
+        text-align:center;
+        border: 1px solid black;
+    }
+
+    th {
+        min-width: 100px;
+        
+        &:hover {
+            background-color: #e0e0e0
         }
+    }
+
+    a {
+        color: #000;
+        text-decoration: none;
     }
 }
 
+.target-matrix__cell_has_content {
+    background-color: gainsboro;
+    color: black;
+}
+
+.target-matrix__cell_no_has_content {
+    background-color: gainsboro;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-image: url(/static/img/fine-diagonal-lines.svg);
+
+}
 
 // Contents of organism-selection modal.
 .matrix-reference-epigenome__organism-selector {

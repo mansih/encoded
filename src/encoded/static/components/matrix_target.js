@@ -5,7 +5,15 @@ import QueryString from '../libs/query_string';
 import { Panel, PanelBody, TabPanel, TabPanelPane } from '../libs/ui/panel';
 import { svgIcon } from '../libs/svg-icons';
 import * as globals from './globals';
+import { MatrixInternalTags } from './objectutils';
+import { SearchControls } from './search';
+import { SearchFilter } from './matrix';
 
+/**
+ * Maximum number of selected items that can be visualized.
+ * @constant
+ */
+const VISUALIZE_LIMIT = 500;
 
 class TargetTabPanel extends TabPanel {
     constructor(props) {
@@ -166,22 +174,19 @@ const TargetDataTable = ({ targetData }) => (
                         </th>
                     }, { targetData })}
                 </tr>
-                {targetData.yAxis.map((tData, tIndex) => {
-                    return <tr className="target-matrix__row-data" key={tIndex}>
-                        {tData.map((y, yIndex) => {
-                            return <td key={yIndex}>
-                                {yIndex === 0 ?
-                                    <a href={`/search/?type=Experiment&status=released&target.label=${y}&assay_title=${targetData.assayTitle}&replicates.library.biosample.donor.organism.scientific_name=${targetData.organismName}`}>
-                                        {y}
-                                    </a> :
-                                    <a href={`/search/?type=Experiment&status=released&target.label=${tData[0]}&assay_title=${targetData.assayTitle}&biosample_ontology.term_name=${targetData.xAxis[yIndex - 1]}&replicates.library.biosample.donor.organism.scientific_name=${targetData.organismName}`}>
-                                        {y}
-                                    </a>
-                                }
-                            </td>
-                        }, { targetData, tData })}
-                    </tr>
-                }, { targetData })}
+                {targetData.yAxis.map((tData, tIndex) => <tr className="target-matrix__row-data" key={tIndex}>
+                    {tData.map((y, yIndex) => (yIndex === 0 ?
+                            <th key={yIndex} className="">
+                                <a href={`/search/?type=Experiment&status=released&target.label=${y}&assay_title=${targetData.assayTitle}&replicates.library.biosample.donor.organism.scientific_name=${targetData.organismName}`}>
+                                    <span title={y}>{y}</span>
+                                </a>
+                            </th> :
+                            <td key={yIndex} className={y !== 0 ? 'target-matrix__cell_has_content' : 'target-matrix__cell_no_has_content'}>
+                                <a href={`/search/?type=Experiment&status=released&target.label=${tData[0]}&assay_title=${targetData.assayTitle}&biosample_ontology.term_name=${targetData.xAxis[yIndex - 1]}&replicates.library.biosample.donor.organism.scientific_name=${targetData.organismName}`}>
+                                    <span title={y}>&nbsp;</span>
+                                </a>
+                            </td>), { targetData, tData })}
+                    </tr>, { targetData })}
             </tbody>
         </table> :
         <div>No data <br /></div>
@@ -319,6 +324,38 @@ TargetMatrixContent.propTypes = {
     context: PropTypes.object.isRequired,
 };
 
+/**
+ * Render the area above the matrix itself, including the page title.
+ */
+const TargetMatrixHeader = ({ context }) => {
+    const visualizeDisabledTitle = context.total > VISUALIZE_LIMIT ? `Filter to ${VISUALIZE_LIMIT} to visualize` : '';
+
+    return (
+        <div className="matrix-header">
+            <div className="matrix-header__title">
+                <h1>{context.title}</h1>
+                <div className="matrix-tags">
+                    <MatrixInternalTags context={context} />
+                </div>
+            </div>
+            <div className="matrix-header__controls">
+                <div className="matrix-header__filter-controls">
+                    <SearchFilter context={context} />
+                </div>
+                <div className="matrix-header__search-controls">
+                    <h4>Showing {context.total} results</h4>
+                    <SearchControls context={context} visualizeDisabledTitle={visualizeDisabledTitle} hideBrowserSelector />
+                </div>
+            </div>
+        </div>
+    );
+};
+
+TargetMatrixHeader.propTypes = {
+    /** Matrix search result object */
+    context: PropTypes.object.isRequired,
+};
+
 const TargetMatrix = ({ context }) => {
     const itemClass = globals.itemClass(context, 'view-item');
 
@@ -326,7 +363,7 @@ const TargetMatrix = ({ context }) => {
         return (
             <Panel addClasses={itemClass}>
                 <PanelBody>
-
+                    <TargetMatrixHeader context={context} />
                     <TargetMatrixContent context={context} />
                 </PanelBody>
             </Panel>
