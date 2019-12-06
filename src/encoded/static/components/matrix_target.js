@@ -176,14 +176,14 @@ const TargetDataTable = ({ targetData }) => (
                 </tr>
                 {targetData.yAxis.map((tData, tIndex) => <tr className="target-matrix__row-data" key={tIndex}>
                     {tData.map((y, yIndex) => (yIndex === 0 ?
-                            <th key={yIndex} className="">
+                            <th key={yIndex} title={y}>
                                 <a href={`/search/?type=Experiment&status=released&target.label=${y}&assay_title=${targetData.assayTitle}&replicates.library.biosample.donor.organism.scientific_name=${targetData.organismName}`}>
-                                    <span title={y}>{y}</span>
+                                    <span>{y}</span>
                                 </a>
                             </th> :
-                            <td key={yIndex} className={y !== 0 ? 'target-matrix__cell_has_content' : 'target-matrix__cell_no_has_content'}>
+                            <td key={yIndex} className={y !== 0 ? 'target-matrix__cell_has_content' : 'target-matrix__cell_no_has_content'} title={y}>
                                 <a href={`/search/?type=Experiment&status=released&target.label=${tData[0]}&assay_title=${targetData.assayTitle}&biosample_ontology.term_name=${targetData.xAxis[yIndex - 1]}&replicates.library.biosample.donor.organism.scientific_name=${targetData.organismName}`}>
-                                    <span title={y}>&nbsp;</span>
+                                    <span>&nbsp;</span>
                                 </a>
                             </td>), { targetData, tData })}
                     </tr>, { targetData })}
