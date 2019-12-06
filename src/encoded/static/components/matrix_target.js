@@ -17,6 +17,25 @@ import { SearchFilter } from './matrix';
  */
 const VISUALIZE_LIMIT = 500;
 
+const TARGET_MATRIX_UPDATED_CONTEXT_PUBSUB = 'target_matrix_updated_context_pubsub';
+const TARGET_MATRIX_UPDATED_SPINNER_STATUS_PUBSUB = 'target_matrix_updated_spinner_status_pubsub';
+
+const Spinner = ({ active }) => (active ?
+        <div className="communicating">
+            <div className="loading-spinner" />
+        </div> :
+        <div className="done">
+            <span>&nbsp;</span>
+        </div>);
+
+Spinner.propTypes = {
+    active: PropTypes.bool,
+};
+
+Spinner.defaultProps = {
+    active: false,
+};
+
 class TargetTabPanel extends TabPanel {
     constructor(props) {
         super(props);
@@ -31,6 +50,7 @@ class TargetTabPanel extends TabPanel {
         const assayTitle = e.target.dataset.assaytitle;
         const organismName = e.target.dataset.organismname;
 
+        PubSub.publish(TARGET_MATRIX_UPDATED_SPINNER_STATUS_PUBSUB, true);
 
         this.context.fetch(e.target.href, {
             method: 'GET',
@@ -38,6 +58,8 @@ class TargetTabPanel extends TabPanel {
                 Accept: 'application/json',
             },
         }).then((response) => {
+            PubSub.publish(TARGET_MATRIX_UPDATED_SPINNER_STATUS_PUBSUB, false);
+
             if (response.ok) {
                 return response.json();
             }
@@ -107,7 +129,7 @@ class TargetTabPanel extends TabPanel {
 
             const targetData = { xAxis, yAxis, assayTitle, organismName };
             updateTargetData(targetData);
-            PubSub.publish('updated-context', responseJson);
+            PubSub.publish(TARGET_MATRIX_UPDATED_CONTEXT_PUBSUB, responseJson);
         });
     }
 
@@ -202,9 +224,12 @@ const TargetDataTable = ({ targetData }) => (
 
 TargetDataTable.propTypes = {
     /** Whole table data */
-    targetData: PropTypes.object.isRequired,
+    targetData: PropTypes.array,
 };
 
+TargetDataTable.defaultProps = {
+    targetData: [],
+};
 
 class TargetMatrixPresentation extends React.Component {
     constructor(props) {
@@ -341,14 +366,22 @@ class TargetMatrixHeader extends React.Component {
 
         this.state = {
             context: this.props.context,
+            active: false,
         };
 
         this.updateContext = this.updateContext.bind(this);
-        this.token = PubSub.subscribe('updated-context', this.updateContext);
+        this.updateDataLoadingStatus = this.updateDataLoadingStatus.bind(this);
+
+        this.updateContextToken = PubSub.subscribe(TARGET_MATRIX_UPDATED_CONTEXT_PUBSUB, this.updateContext);
+        this.updateDataLoadingStatusToken = PubSub.subscribe(TARGET_MATRIX_UPDATED_SPINNER_STATUS_PUBSUB, this.updateDataLoadingStatus);
     }
 
     updateContext(message, context) {
         this.setState({ context });
+    }
+
+    updateDataLoadingStatus(message, active) {
+        this.setState({ active });
     }
 
     render() {
@@ -356,6 +389,7 @@ class TargetMatrixHeader extends React.Component {
 
         return (
             <div className="matrix-header">
+                <Spinner active={this.state.active} />
                 <div className="matrix-header__title">
                     <h1>{this.state.context.title}</h1>
                     <div className="matrix-tags">
