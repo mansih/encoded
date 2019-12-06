@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import url from 'url';
+import PubSub from 'pubsub-js';
 import QueryString from '../libs/query_string';
 import { Panel, PanelBody, TabPanel, TabPanelPane } from '../libs/ui/panel';
 import { svgIcon } from '../libs/svg-icons';
@@ -8,6 +9,7 @@ import * as globals from './globals';
 import { MatrixInternalTags } from './objectutils';
 import { SearchControls } from './search';
 import { SearchFilter } from './matrix';
+
 
 /**
  * Maximum number of selected items that can be visualized.
@@ -29,6 +31,7 @@ class TargetTabPanel extends TabPanel {
         const assayTitle = e.target.dataset.assaytitle;
         const organismName = e.target.dataset.organismname;
 
+
         this.context.fetch(e.target.href, {
             method: 'GET',
             headers: {
@@ -48,10 +51,13 @@ class TargetTabPanel extends TabPanel {
 
             const x1 = responseJson.matrix.x.group_by[0];
             const x2 = responseJson.matrix.x.group_by[1];
-            const xAxis = responseJson.matrix.x[x1].buckets.map(a => a[x2]).
-                map(a => a.buckets).
-                reduce((a,b) => { a = a.concat(b); return a; }, []).
-                map(x => x.key);
+            const xAxis = responseJson.matrix.x[x1].buckets.map(a => a[x2])
+                .map(a => a.buckets)
+                .reduce((a, b) => {
+                    const m = a.concat(b);
+                    return m;
+                }, [])
+                .map(x => x.key);
             const xAxisIndex = xAxis.reduce((x, y, z) => { x[y] = z; return x; }, []);
             const xAxisLength = xAxis.length;
             const y1 = responseJson.matrix.y.group_by[0];
@@ -60,7 +66,8 @@ class TargetTabPanel extends TabPanel {
             const yData = responseJson.matrix.y[y1].buckets
                 .find(rBucket => rBucket.key === organismName)[y2].buckets
                 .reduce((a, b) => {
-                    const m = {}; m[b.key] = b[x1].buckets
+                    const m = {};
+                    m[b.key] = b[x1].buckets
                         .reduce((x, y) => {
                             x.push(y[x2].buckets
                                 .reduce((i, j) => i.concat(j), []));
@@ -100,6 +107,7 @@ class TargetTabPanel extends TabPanel {
 
             const targetData = { xAxis, yAxis, assayTitle, organismName };
             updateTargetData(targetData);
+            PubSub.publish('updated-context', responseJson);
         });
     }
 
@@ -327,29 +335,47 @@ TargetMatrixContent.propTypes = {
 /**
  * Render the area above the matrix itself, including the page title.
  */
-const TargetMatrixHeader = ({ context }) => {
-    const visualizeDisabledTitle = context.total > VISUALIZE_LIMIT ? `Filter to ${VISUALIZE_LIMIT} to visualize` : '';
+class TargetMatrixHeader extends React.Component {
+    constructor(props) {
+        super(props);
 
-    return (
-        <div className="matrix-header">
-            <div className="matrix-header__title">
-                <h1>{context.title}</h1>
-                <div className="matrix-tags">
-                    <MatrixInternalTags context={context} />
+        this.state = {
+            context: this.props.context,
+        };
+
+        this.updateContext = this.updateContext.bind(this);
+        this.token = PubSub.subscribe('updated-context', this.updateContext);
+    }
+
+    updateContext(message, context) {
+        this.setState({ context });
+    }
+
+    render() {
+        const visualizeDisabledTitle = this.state.context.total > VISUALIZE_LIMIT ? `Filter to ${VISUALIZE_LIMIT} to visualize` : '';
+
+        return (
+            <div className="matrix-header">
+                <div className="matrix-header__title">
+                    <h1>{this.state.context.title}</h1>
+                    <div className="matrix-tags">
+                        <MatrixInternalTags context={this.state.context} />
+                    </div>
+                </div>
+                <div className="matrix-header__controls">
+                    <div className="matrix-header__filter-controls">
+                        <SearchFilter context={this.state.context} />
+                    </div>
+                    <div className="matrix-header__search-controls">
+                        <h4>Showing {this.state.context.total} results</h4>
+                        <SearchControls context={this.state.context} visualizeDisabledTitle={visualizeDisabledTitle} hideBrowserSelector />
+                    </div>
                 </div>
             </div>
-            <div className="matrix-header__controls">
-                <div className="matrix-header__filter-controls">
-                    <SearchFilter context={context} />
-                </div>
-                <div className="matrix-header__search-controls">
-                    <h4>Showing {context.total} results</h4>
-                    <SearchControls context={context} visualizeDisabledTitle={visualizeDisabledTitle} hideBrowserSelector />
-                </div>
-            </div>
-        </div>
-    );
-};
+        );
+    }
+}
+
 
 TargetMatrixHeader.propTypes = {
     /** Matrix search result object */
