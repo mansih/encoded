@@ -20,7 +20,7 @@ const VISUALIZE_LIMIT = 500;
 const TARGET_MATRIX_UPDATED_CONTEXT_PUBSUB = 'target_matrix_updated_context_pubsub';
 const TARGET_MATRIX_UPDATED_SPINNER_STATUS_PUBSUB = 'target_matrix_updated_spinner_status_pubsub';
 
-const Spinner = ({ active }) => (active ?
+const Spinner = ({ isSpinnerActive }) => (isSpinnerActive ?
         <div className="communicating">
             <div className="loading-spinner" />
         </div> :
@@ -29,11 +29,11 @@ const Spinner = ({ active }) => (active ?
         </div>);
 
 Spinner.propTypes = {
-    active: PropTypes.bool,
+    isSpinnerActive: PropTypes.bool,
 };
 
 Spinner.defaultProps = {
-    active: false,
+    isSpinnerActive: false,
 };
 
 class TargetTabPanel extends TabPanel {
@@ -366,7 +366,7 @@ class TargetMatrixHeader extends React.Component {
 
         this.state = {
             context: this.props.context,
-            active: false,
+            isSpinnerActive: false,
         };
 
         this.updateContext = this.updateContext.bind(this);
@@ -380,8 +380,8 @@ class TargetMatrixHeader extends React.Component {
         this.setState({ context });
     }
 
-    updateDataLoadingStatus(message, active) {
-        this.setState({ active });
+    updateDataLoadingStatus(message, isSpinnerActive) {
+        this.setState({ isSpinnerActive });
     }
 
     render() {
@@ -389,7 +389,7 @@ class TargetMatrixHeader extends React.Component {
 
         return (
             <div className="matrix-header">
-                <Spinner active={this.state.active} />
+                <Spinner isSpinnerActive={this.state.isSpinnerActive} />
                 <div className="matrix-header__title">
                     <h1>{this.state.context.title}</h1>
                     <div className="matrix-tags">
