@@ -679,8 +679,11 @@ def parse_args():
     parser.add_argument('--iam-role', default='encoded-instance', help="Frontend AWS iam role")
     parser.add_argument('--iam-role-es', default='elasticsearch-instance', help="ES AWS iam role")
     parser.add_argument(
+        '--build-ami', action='store_true', help='Flag to indicate building for ami'
+    )
+    parser.add_argument(
         '--image-id', 
-        default='ami-2133bc59',
+        default='ami-055677b1d938c3bf8', #original ami-2133bc59',
         help=(
             "https://us-west-2.console.aws.amazon.com/ec2/home"
             "?region=us-west-2#LaunchInstanceWizard:ami=ami-2133bc59"
@@ -709,6 +712,8 @@ def parse_args():
     )
     args = parser.parse_args()
     # Default frontend, datanode, and datahead instance types
+    if args.build_ami:
+        args.image_id = 'ami-2133bc59'
     if not args.instance_type:
         if args.es_elect or args.es_wait:
             # datanode
