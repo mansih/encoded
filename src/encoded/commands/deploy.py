@@ -683,7 +683,7 @@ def parse_args():
     )
     parser.add_argument(
         '--image-id', 
-        default='ami-055677b1d938c3bf8', #original ami-2133bc59',
+        default='ami-0d688e607e1484ff1', #original ami-2133bc59',
         help=(
             "https://us-west-2.console.aws.amazon.com/ec2/home"
             "?region=us-west-2#LaunchInstanceWizard:ami=ami-2133bc59"
