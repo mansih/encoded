@@ -682,6 +682,9 @@ def parse_args():
     parser.add_argument('--iam-role', default='encoded-instance', help="Frontend AWS iam role")
     parser.add_argument('--iam-role-es', default='elasticsearch-instance', help="ES AWS iam role")
     parser.add_argument(
+        '--build-ami', action='store_true', help='Flag to indicate building for ami'
+    )
+    parser.add_argument(
         '--image-id', 
         default='ami-2133bc59',
         help=(
@@ -711,7 +714,15 @@ def parse_args():
         help="Size of disk. Allowed values 120, 200, and 500"
     )
     args = parser.parse_args()
-    # Default frontend, datanode, and datahead instance types
+    if not args.build_ami:
+        # If not building a new ami, 
+        # map ami name to number
+        ami_map = {
+            'demo': None,
+            'cluster': None,
+        }
+        if ami_map.get(args.image_id):
+            args.image_id = ami_map[args.image_id]
     if not args.instance_type:
         if args.es_elect or args.es_wait:
             # datanode
