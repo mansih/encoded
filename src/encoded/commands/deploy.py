@@ -707,7 +707,7 @@ def parse_args():
     args = parser.parse_args()
     # Check AMI
     ami_map = {
-        'demo': 'ami-0a73e6e61a785e94f',
+        'demo': 'ami-034f2db581579bb43',
         'es-cluster': None,
         'fe-cluster': None,
     }
