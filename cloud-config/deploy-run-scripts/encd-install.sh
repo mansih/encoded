@@ -9,10 +9,10 @@ ES_PORT="$3"
 REGION_INDEX="$4"
 APP_WORKERS="$5"
 
-
+encd_pybin='/srv/encoded/.pyvenv/bin'
 encd_home='/srv/encoded'
 cd "$encd_home"
-sudo -u encoded buildout bootstrap
+sudo -u encoded "$encd_pybin/buildout" bootstrap
 sudo -u encoded LANG=en_US.UTF-8 bin/buildout -c "$ROLE".cfg buildout:es-ip="$ES_IP" buildout:es-port="$ES_PORT"
 sudo -u encoded mkdir /srv/encoded/.aws
 sudo -u root cp /home/ubuntu/encd-aws-keys/* /srv/encoded/.aws/

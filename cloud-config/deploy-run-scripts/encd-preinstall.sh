@@ -9,12 +9,13 @@ GIT_BRANCH="$3"
 
 git_uri="$GIT_REMOTE/$GIT_BRANCH"
 
+encd_pybin='/srv/encoded/.pyvenv/bin'
 encd_home='/srv/encoded'
 mkdir "$encd_home"
 chown encoded:encoded "$encd_home"
 cd "$encd_home"
+sudo -u encoded python3 -m venv .pyvenv
+sudo -u encoded "$encd_pybin/pip" install --upgrade pip zc.buildout setuptools redis
 sudo -u encoded git clone "$GIT_REPO" .
 sudo -u encoded git checkout -b "$GIT_BRANCH" "$git_uri"
-sudo pip3 install --upgrade pip
-sudo pip3 install -U zc.buildout setuptools redis
-sudo pip3 install -r requirements.txt
+sudo -u encoded "$encd_pybin/pip" install -r requirements.txt

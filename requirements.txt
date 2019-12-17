@@ -45,11 +45,10 @@ mock==2.0.0
 moto==1.3.3
 mr.developer==1.34
 netaddr==0.7.18
-openssl==1.0.2o
 parse==1.6.6
 parse-type==0.3.4
 passlib==1.6.5
-PasteDeploy==1.5.2
+PasteDeploy==2.0.1
 pbkdf2==1.3
 pbr==4.0.3
 Pillow==3.1.1
@@ -61,6 +60,7 @@ pyasn1==0.1.9
 PyBrowserID==0.10.0
 pycparser==2.18
 pyparsing==2.1.1
+pyramid==1.6a2
 pyramid-localroles==0.1
 pyramid-multiauth==0.8.0
 pyramid-tm==0.12.1
@@ -78,6 +78,7 @@ python-editor==1.0.3
 python-magic==0.4.11
 pytz==2018.4
 PyYAML==3.12
+rdflib==4.2.2
 rdflib-jsonld==0.3
 readline==6.2
 repoze.debug==1.0.2
@@ -95,13 +96,12 @@ six==1.11.0
 SPARQLWrapper==1.7.6
 splinter==0.7.5
 SQLAlchemy==1.0.12
-sqlite==3.19.3
 strict-rfc3339==0.6
 subprocess-middleware==0.3
-tk==8.5.19
 transaction==1.4.4
 translationstring==1.3
 urllib3==1.22
+venusian==1.1.0
 waitress==1.0.2
 WebOb==1.6.0
 websocket-client==0.48.0
@@ -111,7 +111,6 @@ wrapt==1.10.11
 WSGIProxy2==0.4.2
 xlrd==0.9.4
 xmltodict==0.11.0
-xz==5.0.5
 zc.recipe.egg==2.0.4
 zope.deprecation==4.1.2
 zope.interface==4.1.3
