@@ -83,7 +83,7 @@
         },
         "go_annotations": {
             "title": "Gene ontology annotations",
-            "descrption": "Gene ontology annotations of the gene, including all three aspects: Biological Process, Cellular Component, and Molecular Function.",
+            "description": "Gene ontology annotations of the gene, including all three aspects: Biological Process, Cellular Component, and Molecular Function.",
             "comment": "Data imported from the Gene Ontology Consortium.",
             "type": "array",
             "default": [],
@@ -117,6 +117,55 @@
                         "comment": "One of P (biological process), F (molecular function) or C (cellular component).",
                         "type": "string",
                         "enum": ["P", "F", "C"]
+                    }
+                }
+            },
+            "permission": "import_items"
+        },
+        "location": {
+            "title": "Gene location coordinates",
+            "description": "Genomic coordinates specifying the location of the gene.",
+            "type": "array",
+            "default": [],
+            "uniqueItems": true,
+            "items": {
+                "title": "Gene Location Coordinates",
+                "description": "Information for chromosome and location coordinates for the gene.",
+                "type": "object",
+                "required": ["refseqid", "assembly", "chromosome", "start", "end"],
+                "properties": {
+                    "refseqid": {
+                        "title": "RefSeq ID",
+                        "description": "The RefSeq accession from which coordinates were obtained",
+                        "type": "string"
+                    },
+                    "assembly": {
+                        "title": "Mapping assembly",
+                        "description": "The genome assembly to which coordinates relate. e.g. GRCh38.",
+                        "type": "string",
+                        "enum": [
+                            "GRCh38",
+                            "GRCh37",
+                            "mm10",
+                            "mm9"
+                        ]
+                    },
+                    "chromosome": {
+                        "title": "Chromosome",
+                        "description": "The number (or letter) designation for the chromosome, e.g. 1 or X",
+                        "type": "string"
+                    },
+                    "start": {
+                        "title": "Start",
+                        "description": "The starting coordinate.",
+                        "type": "integer",
+                        "minimum": 0
+                    },
+                    "end": {
+                        "title": "End",
+                        "description": "The ending coordinate.",
+                        "type": "integer",
+                        "minimum": 0
                     }
                 }
             },
