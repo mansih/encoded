@@ -124,21 +124,17 @@
         },
         "location": {
             "title": "Gene location coordinates",
-            "description": "Genomic coordinates specifying the location of the gene.",
+            "description": "Genomic locations for different assembles of this gene.",
             "type": "array",
             "default": [],
             "uniqueItems": true,
             "items": {
-                "title": "Gene Location Coordinates",
-                "description": "Information for chromosome and location coordinates for the gene.",
+                "title": "Gene Location Coordinate",
+                "description": "Genome position information for one assembly of this gene.",
                 "type": "object",
-                "required": ["refseqid", "assembly", "chromosome", "start", "end"],
+                "additionalProperties": false,
+                "required": ["assembly", "chromosome", "start", "end"],
                 "properties": {
-                    "refseqid": {
-                        "title": "RefSeq ID",
-                        "description": "The RefSeq accession from which coordinates were obtained",
-                        "type": "string"
-                    },
                     "assembly": {
                         "title": "Mapping assembly",
                         "description": "The genome assembly to which coordinates relate. e.g. GRCh38.",
@@ -146,6 +142,7 @@
                         "enum": [
                             "GRCh38",
                             "GRCh37",
+                            "hg19",
                             "mm10",
                             "mm9"
                         ]

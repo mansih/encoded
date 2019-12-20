@@ -3399,5 +3399,15 @@
         "go_name": "positive regulation of transcription, DNA-templated",
         "go_evidence_code": "IBA",
         "go_aspect": "P"
+    }],
+    "location": [{
+        "assembly": "GRCh38",
+        "chromosome": "18",
+        "start": 50282343,
+        "end": 50288322
+    }, {"assembly": "GRCh37",
+        "chromosome": "18",
+        "start": 47808713,
+        "end": 47814692
     }]
 }]
