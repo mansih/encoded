@@ -3405,7 +3405,7 @@
         "chromosome": "chr18",
         "start": 50282343,
         "end": 50288322
-    }, {"assembly": "GRCh37",
+    }, {"assembly": "hg19",
         "chromosome": "chr18",
         "start": 47808713,
         "end": 47814692
