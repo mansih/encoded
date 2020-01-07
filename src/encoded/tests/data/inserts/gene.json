@@ -3402,11 +3402,11 @@
     }],
     "location": [{
         "assembly": "GRCh38",
-        "chromosome": "18",
+        "chromosome": "chr18",
         "start": 50282343,
         "end": 50288322
     }, {"assembly": "GRCh37",
-        "chromosome": "18",
+        "chromosome": "chr18",
         "start": 47808713,
         "end": 47814692
     }]

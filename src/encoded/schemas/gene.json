@@ -141,7 +141,6 @@
                         "type": "string",
                         "enum": [
                             "GRCh38",
-                            "GRCh37",
                             "hg19",
                             "mm10",
                             "mm9"
@@ -149,7 +148,7 @@
                     },
                     "chromosome": {
                         "title": "Chromosome",
-                        "description": "The number (or letter) designation for the chromosome, e.g. 1 or X",
+                        "description": "The number (or letter) designation for the chromosome, e.g. chr1 or chrX",
                         "type": "string"
                     },
                     "start": {
