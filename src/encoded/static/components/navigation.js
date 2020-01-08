@@ -87,9 +87,12 @@ export default class Navigation extends React.Component {
      */
     dropdownClick(dropdownId, e) {
         // After clicking the dropdown trigger button, don't allow the event to bubble to the rest of the DOM.
-        e.nativeEvent.stopImmediatePropagation();
+        if (e) {
+            e.nativeEvent.stopImmediatePropagation();
+        }
+        const dropdownIdIsString = typeof dropdownId === 'string';
         this.setState(prevState => ({
-            openDropdown: dropdownId !== prevState.openDropdown ? dropdownId : '',
+            openDropdown: ((dropdownId !== prevState.openDropdown) && dropdownIdIsString) ? dropdownId : '',
         }));
     }
 
