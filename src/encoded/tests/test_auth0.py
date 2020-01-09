@@ -74,7 +74,6 @@ def mock_request(data={}):
     return request
 
 
-@pytest.fixture(scope='session')
 def mock_context():
     context = mock.Mock()
     context.type_info.schema = ''
