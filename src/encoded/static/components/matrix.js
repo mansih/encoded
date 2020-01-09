@@ -18,20 +18,22 @@ export const MATRIX_VISUALIZE_LIMIT = 500;
  * included gets sorted after these.
  */
 export const matrixAssaySortOrder = [
-    'polyA plus RNA-seq',
     'total RNA-seq',
+    'RAMPAGE',
+    'long read RNA-seq',
     'small RNA-seq',
     'microRNA-seq',
     'microRNA counts',
-    'RNA microarray',
-    'DNase-seq',
     'ATAC-seq',
+    'DNase-seq',
     'WGBS',
-    'RRBS',
-    'MeDIP-seq',
-    'MRE-seq',
+    'DNAme array',
     'TF ChIP-seq',
     'Histone ChIP-seq',
+    'eCLIP',
+    'Hi-C',
+    'genotyping HTS',
+    'genotyping array',
 ];
 
 

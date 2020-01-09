@@ -41,25 +41,25 @@ const entexDonors = [
         accession: 'ENCDO845WKR',
         cssSuffix: 'male1',
         voice: 'Male 1',
-        legendText: '\u2642 1',
+        legendText: '\u26421',
     },
     {
         accession: 'ENCDO793LXB',
         cssSuffix: 'female3',
         voice: 'Female 3',
-        legendText: '\u2640 3',
+        legendText: '\u26403',
     },
     {
         accession: 'ENCDO451RUA',
         cssSuffix: 'male2',
         voice: 'Male 2',
-        legendText: '\u2642 2',
+        legendText: '\u26422',
     },
     {
         accession: 'ENCDO271OUW',
         cssSuffix: 'female4',
         voice: 'Female 4',
-        legendText: '\u2640 4',
+        legendText: '\u26404',
     },
 ];
 
@@ -114,8 +114,18 @@ const DonorLegend = () => (
  *   'cat2|subcat3': {col: 4, category: 'cat2', subcategory: 'subcat3'},
  *   ...
  * }
- * TODO: Convert the reference-epigenome matrix to use the same no_targets method we use in the
- * ENTEx matrix, allowing us to share this function between the two matrix implementations.
+ *
+ * To generate the assay labels that group columns of targets, generate an array of assay
+ * information to generate the table row that contains these assay labels. These labels exist in
+ * column order, with null entries for assays with no child targets, and an object for assays with
+ * child targets, with the assay's label as well as the number of child targets it has.
+ * [
+ *     null,
+ *     null,
+ *     {col: 2, category: 'cat1', subcategoryCount: 3},
+ *     {col: 6, category: 'cat2', subcategoryCount: 0},
+ *     null,
+ * ]
  * @param {object} context ENTEx matrix data
  *
  * @return {object} Keyed column header information
@@ -124,6 +134,7 @@ const generateColMap = (context) => {
     const colCategory = context.matrix.x.group_by[0];
     const colSubcategory = context.matrix.x.group_by[1][0];
     const colMap = {};
+    const targetAssays = [];
     let colIndex = 0;
 
     // Sort column categories according to a specified order, with any items not specified sorted
@@ -138,14 +149,21 @@ const generateColMap = (context) => {
     sortedColCategoryBuckets.forEach((colCategoryBucket) => {
         if (!excludedAssays.includes(colCategoryBucket.key)) {
             const colSubcategoryBuckets = colCategoryBucket[colSubcategory].buckets;
+            const hasSubcategories = colSubcategoryBuckets.length > 0 && colSubcategoryBuckets[0].key !== 'no_target';
 
             // Add the mapping of "assay" key string to column index.
-            colMap[colCategoryBucket.key] = {
-                col: colIndex,
-                category: colCategoryBucket.key,
-                hasSubcategories: colSubcategoryBuckets.length > 0 && colSubcategoryBuckets[0].key !== 'no_target',
-            };
-            colIndex += 1;
+            if (!hasSubcategories) {
+                colMap[colCategoryBucket.key] = {
+                    col: colIndex,
+                    category: colCategoryBucket.key,
+                    hasSubcategories,
+                };
+                targetAssays.push(null);
+                colIndex += 1;
+            } else {
+                // Record something about the assays with targets.
+                targetAssays.push({ col: colIndex, category: colCategoryBucket.key, subcategoryCount: colSubcategoryBuckets.length });
+            }
 
             // Add the mapping of "assay|target" key string to column index for those assays that
             // have targets and don't collapse their targets. A target of "no_target" means the
@@ -164,7 +182,7 @@ const generateColMap = (context) => {
             }
         }
     });
-    return colMap;
+    return { colMap, targetAssays };
 };
 
 
@@ -228,7 +246,7 @@ const convertContextToDataTable = (context) => {
     const rowSubcategory = context.matrix.y.group_by[1];
 
     // Generate the mapping of column categories and subcategories.
-    const colMap = generateColMap(context);
+    const { colMap, targetAssays } = generateColMap(context);
     const colCount = Object.keys(colMap).length;
 
     // Convert column map to an array of column map values sorted by column number for displaying
@@ -239,31 +257,56 @@ const convertContextToDataTable = (context) => {
     // rendering those columns as disabled.
     const colCategoriesWithSubcategories = Object.keys(colMap).filter(colCategoryName => colMap[colCategoryName].hasSubcategories && !collapsedAssays.includes(colCategoryName));
 
+    const targetAssayHeader = [null].concat(targetAssays.map(((targetAssayElement) => {
+        if (targetAssayElement) {
+            // Add cell with assay title and span for the number of targets it has.
+            const categoryQuery = `${colCategory}=${encoding.encodedURIComponent(targetAssayElement.category)}`;
+            return {
+                header: <a href={`${context.search_base}&${categoryQuery}`}>{targetAssayElement.category} <div className="sr-only">{targetAssayElement.category}</div></a>,
+                colSpan: targetAssayElement.subcategoryCount,
+                css: 'matrix__col-category-targetassay',
+            };
+        }
+        return { header: null };
+    })));
+
     // Generate the hierarchical top-row sideways header label cells. The first cell has the
     // legend for the cell data. At the end of this loop, rendering `{header}` shows this header
     // row. The `sortedCols` array gets mutated in this loop, acquiring a `query` property in each
     // of its objects that gets used later to generate cell hrefs.
+    let prevCategory;
+    let prevSubcategory;
     const header = [
         { content: <DonorLegend />, css: 'matrix__entex-corner' },
     ].concat(sortedCols.map((colInfo) => {
         const categoryQuery = `${colCategory}=${encoding.encodedURIComponent(colInfo.category)}`;
+        const renderDivider = colInfo.category !== prevCategory && (prevSubcategory || colInfo.subcategory);
+        prevCategory = colInfo.category;
+        prevSubcategory = colInfo.subcategory;
         if (!colInfo.subcategory) {
             // Add the category column links.
             colInfo.query = categoryQuery;
-            return { header: <a href={`${context.search_base}&${categoryQuery}`}>{colInfo.category} <div className="sr-only">{context.matrix.x.label}</div></a> };
+            return {
+                header: <a href={`${context.search_base}&${categoryQuery}`}>{colInfo.category} <div className="sr-only">{context.matrix.x.label}</div></a>,
+                css: renderDivider ? 'divider' : null,
+            };
         }
 
         // Add the subcategory column links.
         const subCategoryQuery = `${colSubcategory}=${encoding.encodedURIComponent(colInfo.subcategory)}`;
         colInfo.query = `${categoryQuery}&${subCategoryQuery}`;
-        return { header: <a className="sub" href={`${context.search_base}&${categoryQuery}&${subCategoryQuery}`}>{colInfo.subcategory} <div className="sr-only">target for {colInfo.category} {context.matrix.x.label} </div></a> };
+        return {
+            header: <a className="sub" href={`${context.search_base}&${categoryQuery}&${subCategoryQuery}`}>{colInfo.subcategory} <div className="sr-only">target for {colInfo.category} {context.matrix.x.label} </div></a>,
+            css: renderDivider ? 'divider' : null,
+        };
     }));
 
     // Generate the main table content including the data hierarchy, where the upper level of the
     // hierarchy gets referred to here as "rowCategory" and the lower level gets referred to as
     // "rowSubcategory." Both these types of rows get collected into `dataTable` which gets passed
     // to <DataTable>. Also generate an array of React keys to use with <DataTable>.
-    const rowKeys = ['column-categories'];
+    const rowKeys = ['target-assay-categories', 'column-categories'];
+    const rowKeysInitialLength = rowKeys.length;
     const rowCategoryBuckets = context.matrix.y[rowCategory].buckets;
 
     const dataTable = rowCategoryBuckets.reduce((accumulatingTable, rowCategoryBucket, rowCategoryIndex) => {
@@ -271,7 +314,7 @@ const convertContextToDataTable = (context) => {
         // under it.
         const rowSubcategoryBuckets = rowCategoryBucket[rowSubcategory].buckets;
         const rowCategoryQuery = `${rowCategory}=${encoding.encodedURIComponent(rowCategoryBucket.key)}`;
-        rowKeys[rowCategoryIndex + 1] = rowCategoryBucket.key;
+        rowKeys[rowCategoryIndex + rowKeysInitialLength] = rowCategoryBucket.key;
 
         const cells = Array(colCount);
         const subcategoryRows = rowSubcategoryBuckets.map((rowSubcategoryBucket, rowSubcategoryIndex) => {
@@ -357,7 +400,10 @@ const convertContextToDataTable = (context) => {
 
         // Continue adding rendered rows to the matrix.
         return accumulatingTable.concat(subcategoryRows);
-    }, [{ rowContent: header, css: 'matrix__col-category-header' }]);
+    }, [
+        { rowContent: targetAssayHeader, css: 'matrix__col-category-targetassay-header' },
+        { rowContent: header, css: 'matrix__col-category-header' },
+    ]);
     return { dataTable, rowKeys };
 };
 
