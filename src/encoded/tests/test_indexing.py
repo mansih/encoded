@@ -9,7 +9,7 @@ import pytest
 pytestmark = [pytest.mark.indexing]
 
 
-def app_settings(wsgi_server_host_port, elasticsearch_server, postgresql_server):
+def _app_settings(wsgi_server_host_port, elasticsearch_server, postgresql_server):
     from .conftest import _app_settings
     settings = _app_settings.copy()
     settings['create_tables'] = True
@@ -32,7 +32,12 @@ def app_settings(wsgi_server_host_port, elasticsearch_server, postgresql_server)
     return settings
 
 
-def app(app_settings):
+@pytest.fixture(scope='session')
+def app_settings(wsgi_server_host_port, elasticsearch_server, postgresql_server):
+    return _app_settings(wsgi_server_host_port, elasticsearch_server, postgresql_server)
+
+
+def _app(app_settings):
     from encoded import main
     app = main({}, **app_settings)
 
@@ -48,18 +53,22 @@ def app(app_settings):
     DBSession.bind.pool.dispose()
 
 
+@pytest.yield_fixture(scope='session')
+def app(app_settings):
+    for app in _app(app_settings):
+        yield app
+
+
 @pytest.fixture(scope='session')
-def DBSession():
+def DBSession(app):
     from snovault import DBSESSION
-    app_instance = app()
-    return app_instance.registry[DBSESSION]
+    return app.registry[DBSESSION]
 
 
 @pytest.fixture(autouse=True)
-def teardown(dbapi_conn):
+def teardown(app, dbapi_conn):
     from snovault.elasticsearch import create_mapping
-    app_instance = app()
-    create_mapping.run(app_instance)
+    create_mapping.run(app)
     cursor = dbapi_conn.cursor()
     cursor.execute("""TRUNCATE resources, transactions CASCADE;""")
     cursor.close()

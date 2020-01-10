@@ -48,6 +48,7 @@ def auth0_encode_user_profile(auth0_access_token):
     user_info = requests.get(user_url).json()
     return user_info
 
+@pytest.fixture(scope='session')
 def mock_requests_get(**kwargs):
     class MockRequestsGet:
         def __init__(self, kwargs):
@@ -58,6 +59,7 @@ def mock_requests_get(**kwargs):
     return MockRequestsGet(kwargs)
 
 
+@pytest.fixture(scope='session')
 def mock_request(data={}):
     request = mock.Mock()
     request.json = {
@@ -74,6 +76,7 @@ def mock_request(data={}):
     return request
 
 
+@pytest.fixture(scope='session')
 def mock_context():
     context = mock.Mock()
     context.type_info.schema = ''
