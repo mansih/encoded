@@ -552,6 +552,8 @@ table.matrix th.group-all-groups-cell {
 
         li {
             font-style: italic;
+            cursor: -webkit-grab;
+            cursor: grab;
             a::after {
                 content: none !important;
             }
@@ -626,17 +628,17 @@ table.matrix th.group-all-groups-cell {
 }
 
 .target-matrix__cell_has_content {
-    background-color: dimgray;
+    background-color: #2eaebf;
     color: black;
 }
 
 .target-matrix__cell_no_has_content {
-    background-color: gainsboro;
+    background-color: white;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
-    background-image: url(/static/img/fine-diagonal-black-lines.svg);
+    // background-image: url(/static/img/fine-diagonal-black-lines.svg);
 
 }
 

@@ -279,26 +279,49 @@ class TargetMatrixPresentation extends React.Component {
         // organism tab.
         let availableOrganisms = [];
         const organismTabs = {};
-        const headers = [];
+        const headers = [
+            {
+                organismName: 'Homo sapiens',
+                assayTitle: 'Histone ChIP-seq',
+                title: 'Homo sapiens | Histone ChIP-seq',
+                url: 'replicates.library.biosample.donor.organism.scientific_name=Homo sapiens&assay_title=Histone ChIP-seq',
+            }, {
+                organismName: 'Homo sapiens',
+                assayTitle: 'TF ChIP-seq',
+                title: 'Homo sapiens | TF ChIP-seq',
+                url: 'replicates.library.biosample.donor.organism.scientific_name=Homo sapiens&assay_title=TF ChIP-seq',
+            }, {
+                organismName: 'Mus musculus',
+                assayTitle: 'Histone ChIP-seq',
+                title: 'Mus musculus | Histone ChIP-seq',
+                url: 'replicates.library.biosample.donor.organism.scientific_name=Mus musculus&assay_title=Histone ChIP-seq',
+            }, {
+                organismName: 'Mus musculus',
+                assayTitle: 'TF ChIP-seq',
+                title: 'Mus musculus | TF ChIP-seq',
+                url: 'replicates.library.biosample.donor.organism.scientific_name=Mus musculus&assay_title=TF ChIP-seq',
+            },
+        ];
+
         const organismFacet = context.facets.find(facet => facet.field === 'replicates.library.biosample.donor.organism.scientific_name');
         if (organismFacet) {
             availableOrganisms = organismFacet.terms.map(term => term.key);
-            availableOrganisms.forEach((organismName) => {
-                if ((context.matrix.viewableTabs || []).includes(organismName)) {
-                    context.matrix.assay_titles.forEach((assayTitle) => {
-                        const header = [organismName, ' | ', assayTitle].join('');
-                        const key = `${organismName}&assay_title=${assayTitle}`;
-                        organismTabs[key] = <i>{header}</i>;
+            // availableOrganisms.forEach((organismName) => {
+            //     if ((context.matrix.viewableTabs || []).includes(organismName)) {
+            //         context.matrix.assay_titles.forEach((assayTitle) => {
+            //             const header = [organismName, ' | ', assayTitle].join('');
+            //             const key = `${organismName}&assay_title=${assayTitle}`;
+            //             organismTabs[key] = <i>{header}</i>;
 
-                        headers.push({
-                            organismName,
-                            assayTitle,
-                            title: header,
-                            url: `replicates.library.biosample.donor.organism.scientific_name=${organismName}&assay_title=${assayTitle}`,
-                        });
-                    });
-                }
-            });
+            //             headers.push({
+            //                 organismName,
+            //                 assayTitle,
+            //                 title: header,
+            //                 url: `replicates.library.biosample.donor.organism.scientific_name=${organismName}&assay_title=${assayTitle}`,
+            //             });
+            //         });
+            //     }
+            // });
         }
 
         // Determine the currently selected tab from the query string.
