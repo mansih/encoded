@@ -9,7 +9,6 @@ import pytest
 pytestmark = [pytest.mark.indexing]
 
 
-@pytest.fixture(scope='session')
 def app_settings(wsgi_server_host_port, elasticsearch_server, postgresql_server):
     from .conftest import _app_settings
     settings = _app_settings.copy()
@@ -34,9 +33,9 @@ def app_settings(wsgi_server_host_port, elasticsearch_server, postgresql_server)
 
 
 @pytest.yield_fixture(scope='session')
-def app(app_settings):
+def app():
     from encoded import main
-    app = main({}, **app_settings)
+    app = main({}, **app_settings())
 
     yield app
 

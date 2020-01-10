@@ -1,4 +1,5 @@
 from pytest import fixture
+from conftest import app_settings
 
 
 def test_server_defaults(admin, anontestapp):
@@ -20,11 +21,11 @@ def test_server_defaults(admin, anontestapp):
 
 
 @fixture(scope='session')
-def test_accession_app(request, check_constraints, zsa_savepoints, app_settings):
+def test_accession_app(request, check_constraints, zsa_savepoints):
     from encoded import main
-    app_settings = app_settings.copy()
-    app_settings['accession_factory'] = 'encoded.server_defaults.test_accession'
-    return main({}, **app_settings)
+    app_settings_dict = app_settings().copy()
+    app_settings_dict['accession_factory'] = 'encoded.server_defaults.test_accession'
+    return main({}, **app_settings_dict)
 
 
 @fixture
