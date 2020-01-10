@@ -14,13 +14,13 @@ def external_tx():
 
 @pytest.fixture(scope='session')
 def app_settings(wsgi_server_host_port, elasticsearch_server, postgresql_server):
-    from .. import test_indexing
+    from encoded.tests import test_indexing
     return test_indexing.app_settings(wsgi_server_host_port, elasticsearch_server, postgresql_server)
 
 
 @pytest.yield_fixture(scope='session')
 def app(app_settings):
-    from .. import test_indexing
+    from encoded.tests import test_indexing
     from snovault.elasticsearch import create_mapping
     for app in test_indexing.app(app_settings):
         create_mapping.run(app)
@@ -29,7 +29,7 @@ def app(app_settings):
 
 @pytest.mark.fixture_cost(500)
 @pytest.yield_fixture(scope='session')
-def workbook(app):
+def workbook(app, pytestconfig):
     from snovault import DBSESSION
     connection = app.registry[DBSESSION].bind.pool.unique_connection()
     connection.detach()
@@ -40,14 +40,14 @@ def workbook(app):
     cursor.close()
 
     from webtest import TestApp
-    log_level = pytest.config.getoption("--log")
+    log_level = pytestconfig.getoption("--log")
     environ = {
         'HTTP_ACCEPT': 'application/json',
         'REMOTE_USER': 'TEST',
     }
     testapp = TestApp(app, environ)
 
-    from ...loadxl import load_all
+    from encoded.loadxl import load_all
     from pkg_resources import resource_filename
     inserts = resource_filename('encoded', 'tests/data/inserts/')
     docsdir = [resource_filename('encoded', 'tests/data/documents/')]

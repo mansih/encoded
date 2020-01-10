@@ -1,5 +1,5 @@
 from pytest import fixture
-from conftest import app_settings
+from .conftest import app_settings
 
 
 def test_server_defaults(admin, anontestapp):

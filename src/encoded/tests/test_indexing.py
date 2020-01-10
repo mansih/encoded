@@ -32,10 +32,9 @@ def app_settings(wsgi_server_host_port, elasticsearch_server, postgresql_server)
     return settings
 
 
-@pytest.yield_fixture(scope='session')
-def app():
+def app(app_settings):
     from encoded import main
-    app = main({}, **app_settings())
+    app = main({}, **app_settings)
 
     yield app
 
@@ -50,15 +49,17 @@ def app():
 
 
 @pytest.fixture(scope='session')
-def DBSession(app):
+def DBSession():
     from snovault import DBSESSION
-    return app.registry[DBSESSION]
+    app_instance = app()
+    return app_instance.registry[DBSESSION]
 
 
 @pytest.fixture(autouse=True)
-def teardown(app, dbapi_conn):
+def teardown(dbapi_conn):
     from snovault.elasticsearch import create_mapping
-    create_mapping.run(app)
+    app_instance = app()
+    create_mapping.run(app_instance)
     cursor = dbapi_conn.cursor()
     cursor.execute("""TRUNCATE resources, transactions CASCADE;""")
     cursor.close()
@@ -109,7 +110,7 @@ def test_indexing_workbook(testapp, indexer_testapp):
     res = indexer_testapp.post_json('/index', {'record': True})
     assert res.json['indexed'] == 1
 
-    from ..loadxl import load_all
+    from encoded.loadxl import load_all
     from pkg_resources import resource_filename
     inserts = resource_filename('encoded', 'tests/data/inserts/')
     docsdir = [resource_filename('encoded', 'tests/data/documents/')]
