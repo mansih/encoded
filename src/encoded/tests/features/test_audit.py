@@ -16,5 +16,5 @@ def test_auditview(testapp, workbook):
 
 scenarios(
     'audit.feature',
-    strict_gherkin=False
+    strict_gherkin=False,
 )

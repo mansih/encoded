@@ -10,5 +10,5 @@ pytestmark = [
 scenarios(
     'forms.feature',
     'page.feature',
-    strict_gherkin=False
+    strict_gherkin=False,
 )

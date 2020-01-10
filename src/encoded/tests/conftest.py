@@ -77,7 +77,7 @@ def workbook(conn, app, app_settings):
         }
         testapp = TestApp(app, environ)
 
-        from ..loadxl import load_all
+        from encoded.loadxl import load_all
         from pkg_resources import resource_filename
         inserts = resource_filename('encoded', 'tests/data/inserts/')
         docsdir = [resource_filename('encoded', 'tests/data/documents/')]

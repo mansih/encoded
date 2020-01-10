@@ -10,5 +10,5 @@ pytestmark = [
 scenarios(
     'title.feature',
     'toolbar.feature',
-    strict_gherkin=False
+    strict_gherkin=False,
 )

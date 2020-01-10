@@ -14,13 +14,13 @@ def external_tx():
 
 @pytest.fixture(scope='session')
 def app_settings(wsgi_server_host_port, elasticsearch_server, postgresql_server):
-    from ..test_indexing import _app_settings
+    from encoded.tests.test_indexing import _app_settings
     return _app_settings(wsgi_server_host_port, elasticsearch_server, postgresql_server)
 
 
 @pytest.yield_fixture(scope='session')
 def app(app_settings):
-    from ..test_indexing import _app
+    from encoded.tests.test_indexing import _app
     from snovault.elasticsearch import create_mapping
     for app in _app(app_settings):
         create_mapping.run(app)
@@ -47,7 +47,7 @@ def workbook(request, app):
     }
     testapp = TestApp(app, environ)
 
-    from ...loadxl import load_all
+    from encoded.loadxl import load_all
     from pkg_resources import resource_filename
     inserts = resource_filename('encoded', 'tests/data/inserts/')
     docsdir = [resource_filename('encoded', 'tests/data/documents/')]

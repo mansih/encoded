@@ -23,5 +23,5 @@ scenarios(
     'matrix_experiment.feature',
     'matrix_reference_epigenome.feature'
     'matrix.feature',
-    strict_gherkin=False
+    strict_gherkin=False,
 )

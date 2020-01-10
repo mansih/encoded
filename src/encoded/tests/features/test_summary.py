@@ -16,5 +16,5 @@ def test_summaryview(testapp, workbook):
 
 scenarios(
     'summary.feature',
-    strict_gherkin=False
+    strict_gherkin=False,
 )

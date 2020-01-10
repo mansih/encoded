@@ -17,5 +17,5 @@ def test_newsview(testapp, workbook):
 scenarios(
     'views.feature',
     'news.feature',
-    strict_gherkin=False
+    strict_gherkin=False,
 )

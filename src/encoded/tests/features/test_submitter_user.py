@@ -9,5 +9,5 @@ pytestmark = [
 
 scenarios(
     'user.feature',
-    strict_gherkin=False
+    strict_gherkin=False,
 )
