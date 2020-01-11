@@ -17,22 +17,6 @@ import { SearchFilter } from './matrix';
 const VISUALIZE_LIMIT = 500;
 const TARGET_MATRIX_UPDATED_SPINNER_STATUS_PUBSUB = 'target_matrix_updated_spinner_status_pubsub';
 
-const Spinner = ({ isSpinnerActive }) => (isSpinnerActive ?
-        <div className="communicating">
-            <div className="loading-spinner" />
-        </div> :
-        <div className="done">
-            <span>&nbsp;</span>
-        </div>);
-
-Spinner.propTypes = {
-    isSpinnerActive: PropTypes.bool,
-};
-
-Spinner.defaultProps = {
-    isSpinnerActive: false,
-};
-
 const getTargetData = (context, assayTitle, organismName) => {
     if (!context || !context.matrix || !context.matrix.x || !context.matrix.y || !assayTitle || !organismName || context.total === 0) {
         return null;
@@ -95,6 +79,22 @@ const getTargetData = (context, assayTitle, organismName) => {
 
     const targetData = { xAxis, yAxis, assayTitle, organismName };
     return targetData;
+};
+
+const Spinner = ({ isSpinnerActive }) => (isSpinnerActive ?
+    <div className="communicating">
+        <div className="loading-spinner" />
+    </div> :
+    <div className="done">
+        <span>&nbsp;</span>
+    </div>);
+
+Spinner.propTypes = {
+    isSpinnerActive: PropTypes.bool,
+};
+
+Spinner.defaultProps = {
+    isSpinnerActive: false,
 };
 
 /**
@@ -163,7 +163,7 @@ TargetMatrixContent.propTypes = {
 
 class TargetTabPanel extends TabPanel {
     render() {
-        const { headers, context, navCss, moreComponents, moreComponentsClasses, tabFlange, decoration, decorationClasses, selectedTab } = this.props;
+        const { headers, navCss, moreComponents, moreComponentsClasses, tabFlange, decoration, decorationClasses, selectedTab } = this.props;
         let children = [];
         let firstPaneIndex = -1; // React.Children.map index of first <TabPanelPane> component
 
@@ -262,6 +262,18 @@ TargetDataTable.defaultProps = {
 
 
 class TargetMatrixPresentation extends React.Component {
+    constructor() {
+        super();
+
+        this.state = {
+            isSpinnerActive: true,
+        };
+    }
+
+    componentDidMount() {
+        this.setState({ isSpinnerActive: false });
+    }
+
     render() {
         const { context } = this.props;
         const headers = [
@@ -298,13 +310,14 @@ class TargetMatrixPresentation extends React.Component {
 
         return (
             <div className="matrix__presentation">
+                <Spinner isSpinnerActive={this.state.isSpinnerActive} />
                 <div className={`matrix__label matrix__label--horz${!scrolledRight ? ' horz-scroll' : ''}`}>
                     <span>{context.matrix.x.label}</span>
                     {svgIcon('largeArrow')}
                 </div>
                 <div className="matrix__presentation-content">
                     <div className="matrix__label matrix__label--vert"><div>{svgIcon('largeArrow')}{context.matrix.y.label}</div></div>
-                    <TargetTabPanel headers={headers} context={context} selectedTab={selectedTab} tabPanelCss="matrix__data-wrapper">
+                    <TargetTabPanel headers={headers} selectedTab={selectedTab} tabPanelCss="matrix__data-wrapper">
                         {targetData ?
                               <div className="matrix__data" onScroll={this.handleOnScroll} ref={(element) => { this.scrollElement = element; }}>
                                   <TargetDataTable targetData={targetData} />

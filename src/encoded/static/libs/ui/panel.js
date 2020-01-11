@@ -251,6 +251,7 @@ TabPanel.propTypes = {
 };
 
 TabPanel.defaultProps = {
+    tabs: {},
     selectedTab: '',
     tabPanelCss: null,
     navCss: null,
