@@ -554,6 +554,7 @@ table.matrix th.group-all-groups-cell {
                 &.sub {
                     padding-top: 20px;
                     font-weight: normal;
+                    background-color: #f0f0f0;
                 }
             }
         }
@@ -641,14 +642,14 @@ $donor-styles:
             }
 
             &.divider {
-                border-left: 1px solid #e0e0e0;
+                border-left: 1px solid #c0c0c0;
             }
         }
     }
 
     .matrix__col-category-targetassay-header {
         > th.matrix__col-category-targetassay {
-            background-color: #e0e0e0;
+            border-bottom: 2px solid #c0c0c0;
         }
     }
 
