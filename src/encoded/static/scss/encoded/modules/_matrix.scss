@@ -554,10 +554,6 @@ table.matrix th.group-all-groups-cell {
                 &.sub {
                     padding-top: 20px;
                     font-weight: normal;
-
-                    .matrix__content--entex & {
-                        padding-top: 0;
-                    }
                 }
             }
         }
@@ -640,7 +636,6 @@ $donor-styles:
 
                 // Column subcategory links
                 &.sub {
-                    padding-top: 20px;
                     font-weight: normal;
                 }
             }

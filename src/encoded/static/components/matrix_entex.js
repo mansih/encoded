@@ -257,6 +257,7 @@ const convertContextToDataTable = (context) => {
     // rendering those columns as disabled.
     const colCategoriesWithSubcategories = Object.keys(colMap).filter(colCategoryName => colMap[colCategoryName].hasSubcategories && !collapsedAssays.includes(colCategoryName));
 
+    // Generate the matrix header row for the assays with targets.
     const targetAssayHeader = [null].concat(targetAssays.map(((targetAssayElement) => {
         if (targetAssayElement) {
             // Add cell with assay title and span for the number of targets it has.
